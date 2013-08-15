@@ -42,7 +42,7 @@ module Lexicon
         @logger.respond_to?(:fatal, 'fatal level').should be true
       end
 
-    end # describe 'Base'
+    end # describe 'Logger'
 
   end # class RSpec
 
