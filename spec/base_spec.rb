@@ -29,6 +29,11 @@ module Lexicon
         expect{Base.new({})}.to raise_error Lexicon::ArgumentError
       end
 
+      it 'should load a configuration from a YAML file' do
+        lexicon = Lexicon::Base.load_yaml('spec/mocks/base.config.yaml')
+        lexicon.directory.should == '/tmp/lexicon'
+      end
+
     end # describe 'Base'
 
   end # class RSpec
