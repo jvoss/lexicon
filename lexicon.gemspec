@@ -25,7 +25,6 @@ Gem::Specification.new do |spec|
   #spec.add_dependency "rrd-ffi"
   spec.add_dependency 'log4r'
   #spec.add_dependency "sinatra"
-  spec.add_dependency 'sqlite3'
   #spec.add_dependency "snmp"
 
   spec.add_development_dependency "bundler", "~> 1.3"
