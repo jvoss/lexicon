@@ -3,20 +3,26 @@ require 'lexicon'
 
 module Lexicon
 
-  class Logger
+  # Lexicon's Logger object is a wrapper for Log4r::Logger
+  #
+  class Logger < Log4r::Logger
 
     def initialize(log4r_opts = 'Lexicon')
-      @log4r = Log4r::Logger.new(log4r_opts)
-      @log4r.outputters = Log4r::Outputter.stdout
+      super(log4r_opts)
+      self.outputters = Log4r::Outputter.stdout if self.outputters.empty?
     end # def initialize
 
     # Pass methods to Log4r
     #
     def method_missing(m, *args, &block)
-      @log4r.send(m, *args, &block)
+      super(m, *args, &block)
     end # def method_missing
 
-    # TODO respond_to?
+    # Respond_to? method asks
+    #
+    def respond_to?(m, include_private = false)
+      super(m, include_private)
+    end
 
   end # class Logger
 
