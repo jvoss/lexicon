@@ -21,6 +21,7 @@ module Lexicon
       it 'should load a configuration from a YAML file' do
         lexicon = Lexicon::Base.load_yaml('spec/mocks/base.config.yaml')
         lexicon.directory.should == '/tmp/lexicon'
+        Lexicon::Log.level.should == Log4r::INFO
       end
 
       it 'should initialize a new Lexicon::Base object' do

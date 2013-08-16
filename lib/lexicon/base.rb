@@ -16,11 +16,11 @@ module Lexicon
 
     def self.init(opts_hash = {})
       @@directory = opts_hash[:directory]  || raise(ArgumentError, 'Directory required')
-      log4r_opts  = opts_hash[:log4r_opts] ||= 'Lexicon'
+      log_opts    = opts_hash[:log_opts]   ||= {}
 
       # Define Lexicon::Log constant as self or reconfigure Log
       Lexicon.send(:remove_const, :Log) if Lexicon.const_defined?(:Log)
-      Lexicon.const_set(:Log, Logger.new(log4r_opts))
+      Lexicon.const_set(:Log, Logger.new(log_opts))
 
       @@init = true
       return self

@@ -1,3 +1,5 @@
 ---
 :directory:   '/tmp/lexicon'
-:log4r_opts:  'LexiconMockLog'
+:log_opts:
+  :name: 'LexiconMockLog'
+  :level: :INFO

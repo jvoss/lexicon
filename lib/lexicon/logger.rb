@@ -7,7 +7,11 @@ module Lexicon
   #
   class Logger
 
-    def initialize(name = 'Lexicon', level = :ERROR, outputters = Log4r::Outputter.stdout)
+    def initialize(opts_hash={})
+      name       = opts_hash[:name]       ||= 'Lexicon'
+      level      = opts_hash[:level]      ||= :ERROR
+      outputters = opts_hash[:outputters] ||= Log4r::Outputter.stdout
+
       @log = Log4r::Logger.new(name)
       self.level      = Log4r.const_get(level)
       self.outputters = outputters
