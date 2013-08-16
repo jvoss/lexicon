@@ -12,8 +12,6 @@ module Lexicon
 
       it 'should initialize a new Lexicon::Logger object' do
         @logger.is_a?(Lexicon::Logger).should be true
-        # Which is a wrapper for Log4r:
-        @logger.is_a?(Log4r::Logger).should be true
       end
 
       it 'should initialize a Logger object with default stdout outputter' do

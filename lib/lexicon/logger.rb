@@ -5,23 +5,25 @@ module Lexicon
 
   # Lexicon's Log object is a wrapper for Log4r::Logger
   #
-  class Logger < Log4r::Logger
+  class Logger
 
-    def initialize(log4r_opts = 'Lexicon')
-      super(log4r_opts)
-      self.outputters = Log4r::Outputter.stdout if self.outputters.empty?
+    def initialize(name = 'Lexicon', level = :ERROR, outputters = Log4r::Outputter.stdout)
+      @log = Log4r::Logger.new(name)
+      self.level      = Log4r.const_get(level)
+      self.outputters = outputters
+      self.debug 'Logging started'
     end # def initialize
 
     # Pass methods to Log4r
     #
     def method_missing(m, *args, &block)
-      super(m, *args, &block)
+      @log.send(m, *args, &block)
     end # def method_missing
 
     # Respond_to? method asks
     #
     def respond_to?(m, include_private = false)
-      super(m, include_private)
+      @log.respond_to?(m, include_private)
     end
 
   end # class Logger
