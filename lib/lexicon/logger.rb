@@ -3,7 +3,7 @@ require 'lexicon'
 
 module Lexicon
 
-  # Lexicon's Logger object is a wrapper for Log4r::Logger
+  # Lexicon's Log object is a wrapper for Log4r::Logger
   #
   class Logger < Log4r::Logger
 
