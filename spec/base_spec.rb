@@ -26,14 +26,14 @@ module Lexicon
       it 'should initialize a new Lexicon::Base object' do
         lexicon_class = Lexicon::Base
 
-        lexicon = Lexicon::Base.new(:directory => @tmpdir)
-        lexicon.is_a?(lexicon_class).should be true
+        lexicon = Lexicon::Base.init(:directory => @tmpdir)
+        lexicon.init?.should be true
         Lexicon.const_defined?(:Log).should be true
         Lexicon::Log.is_a?(Lexicon::Logger).should be true
       end
 
       it 'should raise if the directory argument is missing' do
-        expect{Base.new({})}.to raise_error Lexicon::ArgumentError
+        expect{Base.init({})}.to raise_error Lexicon::ArgumentError
       end
 
     end # describe 'Base'

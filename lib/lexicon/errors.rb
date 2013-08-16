@@ -8,4 +8,8 @@ module Lexicon
   #
   class InvalidDirectory < RuntimeError; end
 
+  # Raised when Base is not initialized properly
+  #
+  class NotInitialized < RuntimeError; end
+
 end # module Lexicon
