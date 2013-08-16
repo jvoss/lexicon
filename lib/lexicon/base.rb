@@ -13,6 +13,7 @@ module Lexicon
 
     @@directory = nil
     @@init      = false
+    @@sources   = []
 
     def self.init(opts_hash = {})
       @@directory = opts_hash[:directory]  || raise(ArgumentError, 'Directory required')
@@ -39,6 +40,12 @@ module Lexicon
     #
     def self.load_yaml(filename)
       self.init YAML.load_file(filename)
+    end
+
+    # Sources array
+    #
+    def self.sources
+      @@sources
     end
 
   end # module Base

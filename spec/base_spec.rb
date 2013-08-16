@@ -49,6 +49,10 @@ module Lexicon
         Lexicon::Base.directory.should == @tmpdir
       end
 
+      it 'should hold an array of sources' do
+        Lexicon::Base.sources.is_a?(Array).should be true
+      end
+
     end # describe 'Base'
 
   end # class RSpec
