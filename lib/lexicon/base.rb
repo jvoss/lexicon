@@ -31,8 +31,12 @@ module Lexicon
       @@init
     end
 
+    def self.init_check
+      raise NotInitialized, 'Lexicon has not been configured' unless init?
+    end
+
     def self.directory
-      raise NotInitialized, 'Lexicon has not been configured' if @@directory.nil?
+      init_check
       @@directory
     end
 
@@ -58,6 +62,7 @@ module Lexicon
     # Collect all of the instantiated sources
     #
     def self.update(source_obj)
+      init_check
       raise ArgumentError, 'Update must be Lexicon::Source' unless source_obj.is_a?(Source)
       if self.source_by_name(source_obj.name)
         raise DuplicateName, 'Update must be uniquely named Lexicon::Source'
