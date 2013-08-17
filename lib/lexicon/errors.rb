@@ -4,6 +4,10 @@ module Lexicon
   #
   class ArgumentError < ArgumentError; end
 
+  # Raised when a source exists with the same name
+  #
+  class DuplicateName < ArgumentError; end
+
   # Raised by Base when an invalid directory is specified
   #
   class InvalidDirectory < RuntimeError; end

@@ -3,6 +3,7 @@ require 'rspec'
 require 'tmpdir'
 require 'lexicon'
 require 'lexicon/base'
+require 'lexicon/source'
 
 module Lexicon
 
@@ -51,6 +52,15 @@ module Lexicon
 
       it 'should hold an array of sources' do
         Lexicon::Base.sources.is_a?(Array).should be true
+      end
+
+      it 'should allow updates only from Lexicon::Source objects' do
+        expect{Base.update(Lexicon::Base.update('test0'))}.to raise_error Lexicon::ArgumentError
+      end
+
+      it 'should only allow uniquely named Lexicon::Source objects' do
+        Lexicon::Source.new(:name => 'test1')
+        expect{Lexicon::Source.new(:name => 'test1')}.to raise_error Lexicon::DuplicateName
       end
 
     end # describe 'Base'

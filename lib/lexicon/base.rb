@@ -48,6 +48,23 @@ module Lexicon
       @@sources
     end
 
+    # Return a source by name
+    #
+    def self.source_by_name(name)
+      @@sources.each{|source| return source if source.name == name}
+      nil
+    end
+
+    # Collect all of the instantiated sources
+    #
+    def self.update(source_obj)
+      raise ArgumentError, 'Update must be Lexicon::Source' unless source_obj.is_a?(Source)
+      if self.source_by_name(source_obj.name)
+        raise DuplicateName, 'Update must be uniquely named Lexicon::Source'
+      end
+      @@sources.push(source_obj) unless @@sources.include?(source_obj)
+    end
+
   end # module Base
 
 end # module Lexicon
