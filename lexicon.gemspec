@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   #spec.add_dependency "eventmachine"
   #spec.add_dependency "rrd-ffi"
   spec.add_dependency 'log4r'
+  spec.add_dependency 'redis'
   #spec.add_dependency "sinatra"
   #spec.add_dependency "snmp"
 

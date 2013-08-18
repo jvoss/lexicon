@@ -1,3 +1,4 @@
+require 'redis'
 require 'yaml'
 require 'lexicon'
 require 'lexicon/errors'
@@ -13,11 +14,15 @@ module Lexicon
 
     @@directory = nil
     @@init      = false
+    @@redis     = nil
     @@sources   = []
 
     def self.init(opts_hash = {})
       @@directory = opts_hash[:directory]  || raise(ArgumentError, 'Directory required')
       log_opts    = opts_hash[:log_opts]   ||= {}
+
+      # Establish Redis if options given
+      @@redis = Redis.new(opts_hash[:redis_opts]) if opts_hash[:redis_opts]
 
       # Define Lexicon::Log constant as self or reconfigure Log
       Lexicon.send(:remove_const, :Log) if Lexicon.const_defined?(:Log)
@@ -27,6 +32,8 @@ module Lexicon
       return self
     end # def initialize
 
+    # Has Base been initialized?
+    #
     def self.init?
       @@init
     end
@@ -40,34 +47,74 @@ module Lexicon
       @@directory
     end
 
+    # Load a source object by name that has been saved to a Redis store
+    #
+    def self.load_redis_source(name)
+      init_check
+      marshal = @@redis.hget(:sources, name)
+      if marshal
+        source_obj = Marshal.load(marshal)
+        return source_obj
+      end
+    end
+
+    # Load the sources from Redis into an array
+    #
+    def self.load_redis_sources
+      init_check
+      sources = []
+      @@redis.hgetall(:sources).each_value do |source|
+        source_obj = Marshal.load(source)
+        sources.push source_obj
+      end
+      sources
+    end
+
     # Load a Lexicon configuration file
     #
     def self.load_yaml(filename)
       self.init YAML.load_file(filename)
     end
 
+    # Handle saving sources to appropriate store
+    #
+    def self.save_source(source_obj)
+      init_check
+      raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
+      if source_by_name(source_obj.name)
+        raise DuplicateName, 'A Lexicon::Source with this name already exists'
+      end
+      @@redis ? save_redis_source(source_obj) : @@sources.push(source_obj)
+      source_obj
+    end
+
+    # Save a source object to Redis
+    #
+    def self.save_redis_source(source_obj)
+      init_check
+      @@redis.hset(:sources, source_obj.name, Marshal.dump(source_obj))
+      Log.debug "Base - Source object Redis set: #{source_obj.name}"
+    end
+
     # Sources array
     #
     def self.sources
-      @@sources
+      @@redis ? load_redis_sources : @@sources
     end
 
     # Return a source by name
     #
     def self.source_by_name(name)
-      @@sources.each{|source| return source if source.name == name}
+      @@redis ? (return load_redis_source(name)) \
+              : sources.each{|source| return source if source.name == name}
       nil
     end
 
-    # Collect all of the instantiated sources
+    # Collect all of the instantiated sources (observer for Source class)
     #
     def self.update(source_obj)
-      init_check
-      raise ArgumentError, 'Update must be Lexicon::Source' unless source_obj.is_a?(Source)
-      if self.source_by_name(source_obj.name)
-        raise DuplicateName, 'Update must be uniquely named Lexicon::Source'
-      end
-      @@sources.push(source_obj) unless @@sources.include?(source_obj)
+      save_source(source_obj)
+      Log.debug "Base - Source object updated: #{source_obj.name}"
     end
 
   end # module Base
