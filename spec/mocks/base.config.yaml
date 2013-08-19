@@ -3,3 +3,5 @@
 :log_opts:
   :name: 'LexiconMockLog'
   :level: :INFO
+:redis_opts:
+  :host: '127.0.0.1'

@@ -8,7 +8,7 @@ module Lexicon
   class Source
     include Observable
 
-    attr_accessor :description, :name
+    attr_reader :description, :name
 
     # Initialize a new source. Sources are objects containing objects that
     # poll and save information.
@@ -19,6 +19,12 @@ module Lexicon
 
       _add_base_observer
     end # def initialize
+
+    def description=(string)
+      @description = string
+      changed
+      notify_observers(self)
+    end
 
     # Load a source from a configuration YAML.
     #

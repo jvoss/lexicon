@@ -4,6 +4,7 @@ require 'tmpdir'
 require 'lexicon'
 require 'lexicon/base'
 require 'lexicon/source'
+require 'rspec_helpers'
 
 module Lexicon
 
@@ -12,7 +13,9 @@ module Lexicon
     describe 'Base' do
 
       before :all do
-        @tmpdir = Dir.mktmpdir
+        @tmpdir    = Dir.mktmpdir
+        @base_opts = @@base_options
+        @base_opts[:directory] = @tmpdir
       end
 
       after :all do
@@ -25,7 +28,7 @@ module Lexicon
 
       it 'should return the status of whether it is initialized or not' do
         Lexicon::Base.init?.should be false
-        Lexicon::Base.init(:directory => @tmpdir)
+        Lexicon::Base.init(@base_opts)
         Lexicon::Base.init?.should be true
       end
 
@@ -36,7 +39,7 @@ module Lexicon
       end
 
       it 'should initialize a new Lexicon::Base object' do
-        lexicon = Lexicon::Base.init(:directory => @tmpdir)
+        lexicon = Lexicon::Base.init(@base_opts)
         lexicon.init?.should be true
         Lexicon.const_defined?(:Log).should be true
         Lexicon::Log.is_a?(Lexicon::Logger).should be true
@@ -56,11 +59,6 @@ module Lexicon
 
       it 'should allow updates only from Lexicon::Source objects' do
         expect{Base.update(Lexicon::Base.update('test0'))}.to raise_error Lexicon::ArgumentError
-      end
-
-      it 'should only allow uniquely named Lexicon::Source objects' do
-        Lexicon::Source.new(:name => 'test1')
-        expect{Lexicon::Source.new(:name => 'test1')}.to raise_error Lexicon::DuplicateName
       end
 
     end # describe 'Base'

@@ -1,11 +1,19 @@
 require 'lexicon'
 require 'lexicon/source'
+require 'rspec_helpers'
 
 module Lexicon
 
   class RSpec
 
     describe 'Sources' do
+
+      before :all do
+        #Lexicon::Base.init( :directory  => '/tmp',
+        #                    :redis_opts => {:host => '127.0.0.1'}
+        #                  )
+        Lexicon::Base.init(@@base_options)
+      end
 
       it 'should require a name during initialization' do
         expect{Source.new()}.to raise_error Lexicon::ArgumentError
