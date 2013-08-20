@@ -16,4 +16,9 @@ module Lexicon
   #
   class NotInitialized < RuntimeError; end
 
+  # Raised when the source does not exist
+  # (i.e.) Object is attempted to be deleted from Redis but not in store
+  #
+  class UnknownSource < RuntimeError; end
+
 end # module Lexicon

@@ -9,9 +9,6 @@ module Lexicon
     describe 'Sources' do
 
       before :all do
-        #Lexicon::Base.init( :directory  => '/tmp',
-        #                    :redis_opts => {:host => '127.0.0.1'}
-        #                  )
         Lexicon::Base.init(@@base_options)
       end
 

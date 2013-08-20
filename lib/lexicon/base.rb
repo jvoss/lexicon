@@ -43,6 +43,20 @@ module Lexicon
       raise NotInitialized, 'Lexicon has not been configured' unless init?
     end
 
+    # Delete a source object
+    #
+    def self.delete_source(source_obj)
+      init_check
+      raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
+      result = @@redis.hdel(:sources, source_obj.name)
+      if result == 1
+        Log.info "Base - Source object Redis deleted: #{source_obj.name}"
+      else
+        raise UnknownSource, "Base - Cannot delete non-existent Source object in Redis: #{source_obj.name}"
+      end
+      result
+    end
+
     def self.directory
       init_check
       @@directory
@@ -93,9 +107,13 @@ module Lexicon
     def self.update(action, source_obj)
       init_check
       raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
+
       if source_by_name(source_obj.name) && action == :new
         raise DuplicateName, 'A Lexicon::Source with this name already exists'
+      elsif !source_by_name(source_obj.name) && action == :update
+        raise UnknownSource, "Base - Cannot update non-existent Source object in Redis: #{source_obj.name}"
       end
+
       save_source(source_obj)
       Log.debug "Base - Source object updated: #{source_obj.name}"
     end
