@@ -55,6 +55,7 @@ module Lexicon
     end
 
     # Save source object to Redis
+    # **Will overwrite any existing source with same name**
     #
     def self.save_source(source_obj)
       init_check
