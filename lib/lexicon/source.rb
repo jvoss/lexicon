@@ -23,7 +23,7 @@ module Lexicon
     def description=(string)
       @description = string
       changed
-      notify_observers(self)
+      notify_observers(:update, self)
     end
 
     # Load a source from a configuration YAML.
@@ -37,7 +37,7 @@ module Lexicon
     def _add_base_observer
       self.add_observer(Base)
       changed
-      notify_observers(self)
+      notify_observers(:new, self)
     end
 
   end # class Source

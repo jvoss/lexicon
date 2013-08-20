@@ -58,7 +58,7 @@ module Lexicon
       end
 
       it 'should allow updates only from Lexicon::Source objects' do
-        expect{Base.update(Lexicon::Base.update('test0'))}.to raise_error Lexicon::ArgumentError
+        expect{Base.update(:new, 'test0')}.to raise_error Lexicon::ArgumentError
       end
 
     end # describe 'Base'

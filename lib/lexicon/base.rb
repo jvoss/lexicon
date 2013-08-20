@@ -89,8 +89,12 @@ module Lexicon
 
     # Collect all of the instantiated sources (observer for Source class)
     #
-    def self.update(source_obj)
+    def self.update(action, source_obj)
       init_check
+      raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
+      if source_by_name(source_obj.name) && action == :new
+        raise DuplicateName, 'A Lexicon::Source with this name already exists'
+      end
       save_source(source_obj)
       Log.debug "Base - Source object updated: #{source_obj.name}"
     end
