@@ -26,6 +26,13 @@ module Lexicon
         Source.new(:name => @test_hostname).description.should be nil
       end
 
+      it 'should provide a method to return all defined sources' do
+        Lexicon::Source.new(:name => @test_hostname)
+        sources = Lexicon::Source.find_all
+        sources.class.should be Array
+        sources.size.should_not be 0
+      end
+
       it 'should provide a method for sources to be found by name' do
         Lexicon::Source.new(:name => @test_hostname)
         Lexicon::Source.find_by_name(@test_hostname).is_a?(Source).should be true

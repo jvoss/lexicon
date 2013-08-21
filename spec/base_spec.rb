@@ -53,10 +53,6 @@ module Lexicon
         Lexicon::Base.directory.should == @tmpdir
       end
 
-      it 'should hold an array of sources' do
-        Lexicon::Base.sources.is_a?(Array).should be true
-      end
-
       it 'should make Redis available to other classes' do
         Lexicon::Base.redis.class.should be Redis
       end

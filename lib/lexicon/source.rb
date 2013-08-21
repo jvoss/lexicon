@@ -36,6 +36,17 @@ module Lexicon
       save
     end
 
+    # Return an array of all source objects
+    #
+    def self.find_all
+      sources = []
+      Base.redis.hgetall(:sources).each_value do |source|
+        source_obj = Marshal.load(source)
+        sources.push source_obj
+      end
+      sources
+    end
+
     def self.find_by_name(name)
       marshal = Base.redis.hget(:sources, name)
       if marshal
@@ -54,8 +65,9 @@ module Lexicon
     # **Will overwrite any existing source with same name**
     #
     def save
+      result = Base.redis.hset(:sources, self.name, Marshal.dump(self))
       Log.debug "Saving Source object to Redis: #{self.name}"
-      Base.redis.hset(:sources, self.name, Marshal.dump(self))
+      result
     end
 
   end # class Source

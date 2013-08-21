@@ -61,34 +61,6 @@ module Lexicon
       @@redis
     end
 
-    # Sources array loaded from Redis marshaled objects
-    #
-    def self.sources
-      init_check
-      sources = []
-      @@redis.hgetall(:sources).each_value do |source|
-        source_obj = Marshal.load(source)
-        sources.push source_obj
-      end
-      sources
-    end
-
-    # Collect all of the instantiated sources (observer for Source class)
-    ##
-    #def self.update(action, source_obj)
-    #  init_check
-    #  raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
-    #
-    #  if source_by_name(source_obj.name) && action == :new
-    #    raise DuplicateName, 'A Lexicon::Source with this name already exists'
-    #  elsif !source_by_name(source_obj.name) && action == :update
-    #    raise UnknownSource, "Base - Cannot update non-existent Source object in Redis: #{source_obj.name}"
-    #  end
-    #
-    #  save_source(source_obj)
-    #  Log.debug "Base - Source object updated: #{source_obj.name}"
-    #end
-
   end # module Base
 
 end # module Lexicon
