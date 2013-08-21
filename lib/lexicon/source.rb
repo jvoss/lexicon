@@ -1,4 +1,3 @@
-require 'observer'
 require 'lexicon'
 require 'lexicon/base'
 require 'lexicon/errors'
