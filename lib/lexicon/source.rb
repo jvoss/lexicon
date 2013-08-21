@@ -24,7 +24,7 @@ module Lexicon
     def delete
       result = Base.redis.hdel(:sources, name)
       if result == 1
-        Log.info "Base - Source object Redis deleted: #{name}"
+        Log.info "Deleting Source object from Redis: #{name}"
       else
         raise UnknownSource, "Cannot delete non-existent Source object in Redis: #{name}"
       end
