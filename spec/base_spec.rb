@@ -57,21 +57,8 @@ module Lexicon
         Lexicon::Base.sources.is_a?(Array).should be true
       end
 
-      it 'should allow updates only from Lexicon::Source objects' do
-        expect{Base.update(:new, 'test0')}.to raise_error Lexicon::ArgumentError
-      end
-
-      it 'should delete Lexicon::Source objects from Redis' do
-        src = Lexicon::Source.new(:name => 'test-source')
-        Lexicon::Base.source_by_name('test-source').class.should be Lexicon::Source
-        Lexicon::Base.delete_source(src)
-        Lexicon::Base.source_by_name('test-source').should be nil
-      end
-
-      it 'should raise if trying to delete a source object not in Redis' do
-        src = Lexicon::Source.new(:name => 'test-source')
-        Lexicon::Base.delete_source(src)
-        expect{Lexicon::Base.delete_source(src)}.to raise_error Lexicon::UnknownSource
+      it 'should make Redis available to other classes' do
+        Lexicon::Base.redis.class.should be Redis
       end
 
     end # describe 'Base'

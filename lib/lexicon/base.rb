@@ -43,20 +43,6 @@ module Lexicon
       raise NotInitialized, 'Lexicon has not been configured' unless init?
     end
 
-    # Delete a source object
-    #
-    def self.delete_source(source_obj)
-      init_check
-      raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
-      result = @@redis.hdel(:sources, source_obj.name)
-      if result == 1
-        Log.info "Base - Source object Redis deleted: #{source_obj.name}"
-      else
-        raise UnknownSource, "Base - Cannot delete non-existent Source object in Redis: #{source_obj.name}"
-      end
-      result
-    end
-
     def self.directory
       init_check
       @@directory
@@ -68,15 +54,11 @@ module Lexicon
       self.init YAML.load_file(filename)
     end
 
-    # Save source object to Redis
-    # **Will overwrite any existing source with same name**
+    # Expose Redis class variable to other classes
     #
-    def self.save_source(source_obj)
+    def self.redis
       init_check
-      raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
-      @@redis.hset(:sources, source_obj.name, Marshal.dump(source_obj))
-      Log.debug "Base - Source object Redis saved: #{source_obj.name}"
-      source_obj
+      @@redis
     end
 
     # Sources array loaded from Redis marshaled objects
@@ -91,32 +73,21 @@ module Lexicon
       sources
     end
 
-    # Return a source by name
-    #
-    def self.source_by_name(name)
-      init_check
-      marshal = @@redis.hget(:sources, name)
-      if marshal
-        source_obj = Marshal.load(marshal)
-        return source_obj
-      end
-    end
-
     # Collect all of the instantiated sources (observer for Source class)
+    ##
+    #def self.update(action, source_obj)
+    #  init_check
+    #  raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
     #
-    def self.update(action, source_obj)
-      init_check
-      raise ArgumentError, 'Must be Lexicon::Source' unless source_obj.is_a?(Source)
-
-      if source_by_name(source_obj.name) && action == :new
-        raise DuplicateName, 'A Lexicon::Source with this name already exists'
-      elsif !source_by_name(source_obj.name) && action == :update
-        raise UnknownSource, "Base - Cannot update non-existent Source object in Redis: #{source_obj.name}"
-      end
-
-      save_source(source_obj)
-      Log.debug "Base - Source object updated: #{source_obj.name}"
-    end
+    #  if source_by_name(source_obj.name) && action == :new
+    #    raise DuplicateName, 'A Lexicon::Source with this name already exists'
+    #  elsif !source_by_name(source_obj.name) && action == :update
+    #    raise UnknownSource, "Base - Cannot update non-existent Source object in Redis: #{source_obj.name}"
+    #  end
+    #
+    #  save_source(source_obj)
+    #  Log.debug "Base - Source object updated: #{source_obj.name}"
+    #end
 
   end # module Base
 

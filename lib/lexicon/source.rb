@@ -6,7 +6,6 @@ require 'lexicon/errors'
 module Lexicon
 
   class Source
-    include Observable
 
     attr_reader :description, :name
 
@@ -17,13 +16,32 @@ module Lexicon
       @name        = hash[:name]        || raise(Lexicon::ArgumentError, 'Name required')
       @description = hash[:description]
 
-      _add_base_observer
+      save # Save a copy of self to Redis on creation
     end # def initialize
+
+    # Delete self from Redis
+    #
+    def delete
+      result = Base.redis.hdel(:sources, name)
+      if result == 1
+        Log.info "Base - Source object Redis deleted: #{name}"
+      else
+        raise UnknownSource, "Base - Cannot delete non-existent Source object in Redis: #{name}"
+      end
+      result
+    end
 
     def description=(string)
       @description = string
-      changed
-      notify_observers(:update, self)
+      save
+    end
+
+    def self.find_by_name(name)
+      marshal = Base.redis.hget(:sources, name)
+      if marshal
+        source_obj = Marshal.load(marshal)
+        return source_obj
+      end
     end
 
     # Load a source from a configuration YAML.
@@ -32,12 +50,12 @@ module Lexicon
       self.new YAML.load_file(filename)
     end
 
-    private
-
-    def _add_base_observer
-      self.add_observer(Base)
-      changed
-      notify_observers(:new, self)
+    # Save source object to Redis
+    # **Will overwrite any existing source with same name**
+    #
+    def save
+      Log.debug "Saving Source object to Redis: #{self.name}"
+      Base.redis.hset(:sources, self.name, Marshal.dump(self))
     end
 
   end # class Source
