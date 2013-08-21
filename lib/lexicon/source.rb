@@ -26,7 +26,7 @@ module Lexicon
       if result == 1
         Log.info "Base - Source object Redis deleted: #{name}"
       else
-        raise UnknownSource, "Base - Cannot delete non-existent Source object in Redis: #{name}"
+        raise UnknownSource, "Cannot delete non-existent Source object in Redis: #{name}"
       end
       result
     end
