@@ -30,8 +30,10 @@ module Lexicon
       result
     end
 
+    # Set the description
+    #
     def description=(string)
-      @description = string
+      @description = string.to_s
       save
     end
 
@@ -46,18 +48,14 @@ module Lexicon
       sources
     end
 
+    # Find a source object by name (string)
+    #
     def self.find_by_name(name)
       marshal = Base.redis.hget(:sources, name)
       if marshal
         source_obj = Marshal.load(marshal)
         return source_obj
       end
-    end
-
-    # Load a source from a configuration YAML.
-    #
-    def self.load_yaml(filename)
-      self.new YAML.load_file(filename)
     end
 
     # Save source object to Redis
