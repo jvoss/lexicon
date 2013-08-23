@@ -1,3 +1,4 @@
+require 'snmp'
 require 'lexicon'
 require 'lexicon/base'
 require 'lexicon/errors'
@@ -6,7 +7,7 @@ module Lexicon
 
   class Source
 
-    attr_reader :description, :name
+    attr_reader :description, :name, :snmp_opts
 
     # Initialize a new source. Sources are objects containing objects that
     # poll and save information.
@@ -14,6 +15,7 @@ module Lexicon
     def initialize(hash={})
       @name        = hash[:name]        || raise(Lexicon::ArgumentError, 'Name required')
       @description = hash[:description]
+      @snmp_opts   = hash[:snmp_opts]
 
       save # Save a copy of self to Redis on creation
     end # def initialize
@@ -42,8 +44,7 @@ module Lexicon
     def self.find_all
       sources = []
       Base.redis.hgetall(:sources).each_value do |source|
-        source_obj = Marshal.load(source)
-        sources.push source_obj
+        sources.push Marshal.load(source)
       end
       sources
     end
@@ -65,6 +66,19 @@ module Lexicon
       result = Base.redis.hset(:sources, self.name, Marshal.dump(self))
       Log.debug "Saving Source object to Redis: #{self.name}"
       result
+    end
+
+    # Instantiate a new SNMP Manager
+    #
+    def snmp
+      raise ArgumentError, 'No SNMP options found for source' if @snmp_opts.nil?
+      SNMP::Manager.new(@snmp_opts)
+    end
+
+    # Change SNMP options
+    #
+    def snmp_opts=(hash={})
+      @snmp_opts = hash
     end
 
   end # class Source

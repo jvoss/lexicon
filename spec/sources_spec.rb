@@ -10,11 +10,11 @@ module Lexicon
 
       before :all do
         Lexicon::Base.init(@@base_options)
-        @test_hostname = "test#{rand(100)}"
+        @test_hostname = "--test#{rand(100)}"
       end
 
-      before :each do
-        # Clean up from previous RSpec run if needed
+      after :each do
+        # Clean up from each test if needed
         Source.find_by_name(@test_hostname).delete if Source.find_by_name(@test_hostname)
       end
 
@@ -62,6 +62,13 @@ module Lexicon
         obj = Lexicon::Source.new(:name => @test_hostname)
         obj.delete
         expect{obj.delete}.to raise_error UnknownSource
+      end
+
+      it 'should be able to support SNMP' do
+        obj = Lexicon::Source.new(:name      => @test_hostname,
+                                  :snmp_opts => {:host => '127.0.0.1'}
+                                 )
+        obj.snmp.class.should be SNMP::Manager
       end
 
     end # describe 'Sources'
