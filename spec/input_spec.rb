@@ -16,7 +16,7 @@ module Lexicon
 
       after :each do
         # Clean up from each test if needed
-        @test_host.inputs{|input| @test_host.delete_input(input)}
+        @test_host.inputs.each {|input| @test_host.delete_input(input)}
       end
 
       after :all do

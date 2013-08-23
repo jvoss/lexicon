@@ -32,16 +32,16 @@ module Lexicon
 
       it 'should provide a method to associate Input objects with sources' do
         source = Lexicon::Source.new(:name => @test_hostname)
-        input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
-        source.add_input(input)
+        Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
+        # Instantiated input object automatically calls #add_input
+        source.inputs.size.should be 1
       end
 
       it 'should provide a method to list all associated Input objects' do
         source = Lexicon::Source.new(:name => @test_hostname)
         source.inputs.class.should be Array
         source.inputs.size.should equal 0
-        input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
-        source.add_input(input)
+        Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
         source.inputs.class.should be Array
         source.inputs.size.should equal 1
       end
@@ -49,7 +49,6 @@ module Lexicon
       it 'should provide a method to delete source objects' do
         source = Lexicon::Source.new(:name => @test_hostname)
         input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
-        source.add_input(input)
         source.inputs[0].name.should == input.name
         source.delete_input(input)
         source.inputs.size.should be 0

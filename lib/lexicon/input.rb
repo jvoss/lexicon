@@ -15,11 +15,13 @@ module Lexicon
       @name        = opts[:name]     || raise(ArgumentError, 'Name required')
 
       @source      = validate_source opts[:source]
+
+      # Register self with source object
+      Source.find_by_name(@source).add_input(self)
     end
 
     def description=(string)
       @description = string.to_s
-      save
     end
 
     # Poll the object for its data
