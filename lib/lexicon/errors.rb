@@ -4,7 +4,7 @@ module Lexicon
   #
   class ArgumentError < ArgumentError; end
 
-  # Raised when a source exists with the same name
+  # Raised when a source/input exists with the same name
   #
   class DuplicateName < ArgumentError; end
 

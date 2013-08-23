@@ -22,8 +22,37 @@ module Lexicon
         expect{Source.new()}.to raise_error Lexicon::ArgumentError
       end
 
+      it 'should now allow a source to be named "sources"' do
+        expect{Source.new(:name => 'sources')}.to raise_error Lexicon::ArgumentError
+      end
+
       it 'should not require a description during initialization' do
         Source.new(:name => @test_hostname).description.should be nil
+      end
+
+      it 'should provide a method to associate Input objects with sources' do
+        source = Lexicon::Source.new(:name => @test_hostname)
+        input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
+        source.add_input(input)
+      end
+
+      it 'should provide a method to list all associated Input objects' do
+        source = Lexicon::Source.new(:name => @test_hostname)
+        source.inputs.class.should be Array
+        source.inputs.size.should equal 0
+        input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
+        source.add_input(input)
+        source.inputs.class.should be Array
+        source.inputs.size.should equal 1
+      end
+
+      it 'should provide a method to delete source objects' do
+        source = Lexicon::Source.new(:name => @test_hostname)
+        input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
+        source.add_input(input)
+        source.inputs[0].name.should == input.name
+        source.delete_input(input)
+        source.inputs.size.should be 0
       end
 
       it 'should provide a method to return all defined sources' do
