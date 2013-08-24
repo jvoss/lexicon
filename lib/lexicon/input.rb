@@ -15,6 +15,8 @@ module Lexicon
       @name        = opts[:name]     || raise(ArgumentError, 'Name required')
 
       @source      = validate_source opts[:source]
+      # Key used by Redis to store data
+      @redis_key   = "#{@source}:data:#{@name}"
 
       # Register self with source object
       Source.find_by_name(@source).add_input(self)
