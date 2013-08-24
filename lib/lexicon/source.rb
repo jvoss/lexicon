@@ -53,7 +53,8 @@ module Lexicon
       new_inputs = inputs.delete_if do |input|
         input_obj.name == input.name
       end
-      Base.redis.hset(self.name, :inputs, Marshal.dump(new_inputs))
+      Base.redis.del(input_obj.instance_variable_get(:@redis_key))  # delete data
+      Base.redis.hset(self.name, :inputs, Marshal.dump(new_inputs)) # dump current input names
     end
 
     # Set the description

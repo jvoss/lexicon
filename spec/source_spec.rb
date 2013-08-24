@@ -46,12 +46,14 @@ module Lexicon
         source.inputs.size.should equal 1
       end
 
-      it 'should provide a method to delete source objects' do
+      it 'should provide a method to delete input objects' do
         source = Lexicon::Source.new(:name => @test_hostname)
         input  = Lexicon::Input.new(:name => 'test', :interval => 5, :source => source)
         source.inputs[0].name.should == input.name
         source.delete_input(input)
         source.inputs.size.should be 0
+        # Ensure any data created by the input object is deleted
+        Base.redis.hkeys(input.instance_variable_get(:@redis_key)).size.should be 0
       end
 
       it 'should provide a method to return all defined sources' do
