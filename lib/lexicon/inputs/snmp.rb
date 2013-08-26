@@ -76,16 +76,19 @@ module Lexicon
     # Retrieve data between the begin and end time
     #
     def retrieve(begin_time, end_time)
-      series_hash = {}
+      timestamps = []
 
       # Grab all the data within the timestamp range
       Base.redis.hkeys(@redis_key).each do |timestamp|
         timestamp = timestamp.to_i # ensure conversion to integer
 
         if timestamp >= begin_time.to_i && timestamp <= end_time.to_i
-          series_hash[timestamp] = Base.redis.hget(@redis_key, timestamp)
+          timestamps.push timestamp
         end
-      end
+      end # Base.redis.hkeys.each
+
+      result = Base.redis.hmget(@redis_key, timestamps)
+      series_hash = Hash[*timestamps.zip(result).flatten]
 
       return decode_counter(series_hash) if @type == :counter32 or @type == :counter64
       series_hash

@@ -38,6 +38,12 @@ module Lexicon
         obj.poll.keys.include?(:data).should be true
       end
 
+      it 'should provide a stub for retrieving data from itself' do
+        obj = Lexicon::Input.new(:name => @test_name, :interval => 5, :source => @test_host)
+        obj.respond_to?(:retrieve).should be true
+        obj.retrieve(0, 1).should be nil
+      end
+
     end # describe 'Inputs'
 
   end # class RSpec

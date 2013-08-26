@@ -7,7 +7,7 @@ module Lexicon
   #
   class Input
 
-    attr_reader :description, :interval, :name
+    attr_reader :description, :interval, :name, :source
 
     def initialize(opts={})
       @description = opts[:description]
@@ -30,6 +30,11 @@ module Lexicon
     #
     def poll
       {:time => Time.now.to_i, :data => nil}
+    end
+
+    # Stub method to pull a data set for a given time interval
+    def retrieve(begin_time, end_time)
+      nil
     end
 
     def validate_source(source_obj)
