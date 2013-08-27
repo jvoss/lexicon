@@ -87,6 +87,30 @@ module Lexicon
         result.keys.should == [2000, 3000, 4000]
       end
 
+      it 'should retrieve data from Redis for the last polled integer data' do
+        input = InputSNMP.new(@test_input_options.dup.merge(:oid => '1.2.3.4', :type => :integer))
+        [ 1000, 2000, 3000, 4000, 5000 ].each do |timestamp|
+          Base.redis.hset(input.instance_variable_get(:@redis_key), timestamp, rand(3))
+        end
+
+        result = input.retrieve_last
+        result.class.should be Hash
+        result.size.should be 1
+        result.keys.should == [5000]
+      end
+
+      it 'should retrieve data from Redis for the last polled counter data' do
+        input = InputSNMP.new(@test_input_options.dup.merge(:oid => '1.2.3.4', :type => :counter64))
+        YAML.load_file('spec/mocks/snmp_counter64_hash.yaml').each_pair do |key, value|
+          Base.redis.hset(input.instance_variable_get(:@redis_key), key, value)
+        end
+
+        result = input.retrieve_last
+        result.class.should be Hash
+        result.size.should be 1
+        result.keys.should == [1377305030]
+      end
+
     end # describe 'InputSNMP'
 
   end # class RSpec

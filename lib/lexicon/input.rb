@@ -33,7 +33,8 @@ module Lexicon
     end
 
     # Stub method to pull a data set for a given time interval
-    def retrieve(begin_time, end_time)
+    # Retrieve the latest information when no time given
+    def retrieve(begin_time = nil, end_time = nil)
       nil
     end
 

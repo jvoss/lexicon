@@ -94,6 +94,26 @@ module Lexicon
       series_hash
     end
 
+    # Retrieve last (latest data) set
+    #
+    def retrieve_last
+
+      case
+        when (@type == :counter32 or @type == :counter64)
+          # Must retrieve the last two timestamps by time for counter comparison
+          timestamps = Base.redis.hkeys(@redis_key).sort_by(&:to_i).last(2).map(&:to_i)
+          result = Base.redis.hmget(@redis_key, timestamps)
+          set_hash = Hash[*timestamps.zip(result).flatten]
+          set_hash = decode_counter(set_hash)
+        else
+          timestamp = Base.redis.hkeys(@redis_key).sort_by(&:to_i).last.to_i
+          result = Base.redis.hmget(@redis_key, timestamps)
+          set_hash = { timestamp => result }
+      end
+
+      set_hash
+    end
+
     private
 
     def save(hash)
