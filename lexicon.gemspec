@@ -21,12 +21,12 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>=1.9.2'
 
   # https://github.com/morellon/rrd-ffi
-  #spec.add_dependency "eventmachine"
+  spec.add_dependency 'eventmachine'
   #spec.add_dependency "rrd-ffi"
   spec.add_dependency 'log4r'
   spec.add_dependency 'redis'
-  #spec.add_dependency "sinatra"
-  spec.add_dependency "snmp"
+  spec.add_dependency 'sinatra'
+  spec.add_dependency 'snmp'
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"

@@ -16,6 +16,10 @@ module Lexicon
   #
   class NotInitialized < RuntimeError; end
 
+  # Raised when a Chart object does not exist
+  #
+  class UnknownChart < RuntimeError; end
+
   # Raised when the input does not exist
   # (i.e. Object is attempted to be deleted from Redis but is not in store)
   class UnknownInput < RuntimeError; end

@@ -87,11 +87,15 @@ module Lexicon
         end
       end # Base.redis.hkeys.each
 
-      result = Base.redis.hmget(@redis_key, timestamps)
-      series_hash = Hash[*timestamps.zip(result).flatten]
+      unless timestamps.empty? # do nothing if there were not any timestamps
+        result = Base.redis.hmget(@redis_key, timestamps)
+        series_hash = Hash[*timestamps.zip(result).flatten]
 
-      return decode_counter(series_hash) if @type == :counter32 or @type == :counter64
-      series_hash
+        return decode_counter(series_hash) if @type == :counter32 or @type == :counter64
+        return series_hash
+      end
+
+      {}
     end
 
     # Retrieve last (latest data) set

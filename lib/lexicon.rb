@@ -1,5 +1,6 @@
 require 'lexicon/base'
 require 'lexicon/errors'
+require 'lexicon/highcharts'
 require 'lexicon/input'
 require 'lexicon/inputs/snmp'
 require 'lexicon/poller'
