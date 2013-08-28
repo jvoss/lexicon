@@ -56,7 +56,7 @@ module Lexicon
 
     XAXIS  = {
         :type   => :datetime,
-        :title  => {:text => :null},
+        :title  => {:text => ''},
         :events => {:afterSetExtremes => 'requestAsyncData'}
     }
 
