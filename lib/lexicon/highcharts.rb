@@ -21,7 +21,7 @@ module Lexicon
     def initialize(opts={})
       #@js_library = opts[:js_library]               # URL location of Highstock JS library
       @axis       = opts[:axis]            ||= {}    # Hash containing axis information
-      @shift      = opts[:shift]           ||= true  # Highcharts option to shift chart
+      @shift      = opts[:shift]           ||= false # Highcharts option to shift chart
       @data_url   = opts[:data_url]                  # URL to pull time ranged JSON data
       @live_url   = opts[:live_url]                  # URL to pull live JSON data
       @interval   = opts[:interval]                  # Update interval in seconds
@@ -29,8 +29,8 @@ module Lexicon
 
       @chart         = opts[:chart]        ||= CHART
       @colors        = opts[:colors]       ||= INTERFACE_CHART_COLORS
-      @title         = opts[:title]        ||= {:text => 'title'}
-      @subtitle      = opts[:subtitle]     ||= {:text => 'subtitle'}
+      @title         = opts[:title]        ||= {:text => ''}
+      @subtitle      = opts[:subtitle]     ||= {:text => ''}
       @xaxis         = opts[:xaxis]        ||= XAXIS
       @yaxis         = opts[:yaxis]        ||= YAXIS
       @tooltip       = opts[:tooltip]      ||= TOOLTIP
@@ -112,8 +112,8 @@ module Lexicon
     # **Will overwrite any existing chart with same name**
     #
     def save
-      result = Base.redis.hset(:charts, self.title[:text], Marshal.dump(self))
-      Log.debug "Saving Chart object to Redis: #{self.title[:text]}"
+      result = Base.redis.hset(:charts, self.name, Marshal.dump(self))
+      Log.debug "Saving Chart object to Redis: #{self.name}"
       result
     end
 

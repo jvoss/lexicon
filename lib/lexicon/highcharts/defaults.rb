@@ -21,12 +21,12 @@ module Lexicon
     }
 
     PLOT_OPTIONS = {
-        :area => {
-            :lineWidth => 1,
-            :marker    => {:enabled => false},
-            :states    => {:hover => {:lineWidth => 1}},
-            :threshold => :null
-        },
+        #:area => {
+        #    :lineWidth => 1,
+        #    :marker    => {:enabled => false},
+        #    :states    => {:hover => {:lineWidth => 1}},
+        #    :threshold => :null
+        #},
         :line => {
             :lineWidth => 1,
             :marker    => { :enabled => false},
@@ -61,7 +61,7 @@ module Lexicon
     }
 
     YAXIS  = {
-        :title => {:text => 'Y-AXIS'},
+        :title => {:text => ''},
         :min   => 0
     }
 

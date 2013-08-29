@@ -4,7 +4,7 @@ require 'lexicon'
 Lexicon::Base.init(
     :directory  => '/tmp',
     :log_opts   => {:level => :DEBUG},
-    :redis_opts => {:host => '172.31.10.16'}
+    :redis_opts => {:host => '127.0.0.1'}
 )
 
 get '/:chart_name/live' do
