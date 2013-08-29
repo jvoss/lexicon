@@ -1,8 +1,8 @@
 require 'json'
 require 'lexicon'
 require 'lexicon/highcharts/archive_chart'
-require 'lexicon/highcharts/live_chart'
 require 'lexicon/highcharts/defaults'
+require 'lexicon/highcharts/live_chart'
 
 module Lexicon
 

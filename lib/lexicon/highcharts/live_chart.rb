@@ -21,10 +21,12 @@ module Lexicon
         chart[:navigator]     = @navigator
         chart[:scrollbar]     = @scrollbar
 
-        # Build series data
+        # Build series data (default to the last 5 minutes)
         chart[:series] = build_series((Time.now.to_i - 300), Time.now.to_i)
 
+        # Remove not needed and things that cause problems with live charts
         chart.delete(:navigator) # remove navigatorData FIXME
+        chart[:rangeSelector] = { :enabled => false } # turn off range selector
         chart.delete(:scrollbar)
 
         # Create JSON data
