@@ -24,7 +24,8 @@ module Lexicon
         # Build series data
         chart[:series] = build_series((Time.now.to_i - 300), Time.now.to_i)
 
-        chart[:navigator][:series].delete(:data) # remove navigatorData FIXME
+        chart.delete(:navigator) # remove navigatorData FIXME
+        chart.delete(:scrollbar)
 
         # Create JSON data
         json = JSON.pretty_generate(chart)
@@ -113,10 +114,11 @@ module Lexicon
               if (series.name != 'Navigator'){
                 // Only add the point if it currently does not exist
                 if (series.points[series.points.length-1]['x'] < new_data[series.name][0]) {
-                  series.addPoint(new_data[series.name], true, shift, false);
+                  series.addPoint(new_data[series.name], false, shift, false);
                 }
               }
             });
+            chart.redraw();
           }); // $.getJSON
 
           // Set the timeout for refreshing data
