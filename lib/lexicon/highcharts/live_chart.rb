@@ -61,7 +61,9 @@ module Lexicon
           $.each(this.points, function (i, point) {
               // Only format points with 'bits' or 'Bits' in series name otherwise push value back
               if (point.series.name.indexOf('bits' != -1) || point.series.name.indexOf('Bits' != -1)){
-                result.push('<span style="font-weight:bold; color:'+ point.series.color +'">' + point.series.name + '</span>' + ': ' + point.y + '<br />');
+                // Format the number to add commas
+                var value = point.y.toString().replace(#{'/\B(?=(\d{3})+(?!\d))/g'}, ",");
+                result.push('<span style="font-weight:bold; color:'+ point.series.color +'">' + point.series.name + '</span>' + ': ' + value + '<br />');
               } else {
                 bits = point.y;
                 if (isNaN(bits)) {
@@ -84,7 +86,6 @@ module Lexicon
           });
 
           result.unshift(new Date(this.x).toString() + '<br/>');
-          //return (result[0] + result[1] + result[2]);
           return(result.join(''));
         }; // function tooltipBitsWithUnit
 
