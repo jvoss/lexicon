@@ -1,10 +1,15 @@
 require 'sinatra'
 require 'lexicon'
 
+# Arguments
+# lexicon-httpd.rb <REDIS IP>
+#
+raise ArgumentError, 'Redis IP address required' if ARGV[0].nil?
+
 Lexicon::Base.init(
     :directory  => '/tmp',
     :log_opts   => {:level => :DEBUG},
-    :redis_opts => {:host => '127.0.0.1'}
+    :redis_opts => {:host => ARGV[0]}
 )
 
 get '/:chart_name/live' do
