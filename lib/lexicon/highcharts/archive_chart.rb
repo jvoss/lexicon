@@ -20,30 +20,30 @@ module Lexicon
         function tooltipBitsWithUnit() {
           result = []
           $.each(this.points, function (i, point) {
-              // Only format points with 'bits' or 'Bits' in series name otherwise push value back
-              if (point.series.name.indexOf('bits' != -1) || point.series.name.indexOf('Bits' != -1)){
-                // Format the number to add commas
-                var value = point.y.toString().replace(#{'/\B(?=(\d{3})+(?!\d))/g'}, ",");
-                result.push('<span style="font-weight:bold; color:'+ point.series.color +'">' + point.series.name + '</span>' + ': ' + value + '<br />');
-              } else {
-                bits = point.y;
-                if (isNaN(bits)) {
-                    return;
-                }
-                var units = [' bits', ' Kb', ' Mb', ' Gb', ' Tb', ' Pb', ' Eb', ' Zb', ' Yb'];
-                var amountOf2s = Math.floor(Math.log(+bits) / Math.log(2));
-                if (amountOf2s < 1) {
-                    amountOf2s = 0;
-                }
-                var i = Math.floor(amountOf2s / 10);
-                bits = +bits / Math.pow(2, 10 * i);
-
-                // Rounds to 2 decimals places.
-                if (bits.toString().length > bits.toFixed(3).toString().length) {
-                    bits = bits.toFixed(2);
-                }
-                result.push('<span style="font-weight:bold; color:'+ point.series.color +'">' + point.series.name + '</font></b>' + ': ' + bits + units[i] + '<br/>');
+            // Only format points with 'bits' or 'Bits' in series name otherwise push value back
+            if (point.series.name.indexOf('bits') != -1 || point.series.name.indexOf('Bits') != -1){
+              bits = point.y;
+              if (isNaN(bits)) {
+                  return;
               }
+              var units = [' bits', ' Kb', ' Mb', ' Gb', ' Tb', ' Pb', ' Eb', ' Zb', ' Yb'];
+              var amountOf2s = Math.floor(Math.log(+bits) / Math.log(2));
+              if (amountOf2s < 1) {
+                  amountOf2s = 0;
+              }
+              var i = Math.floor(amountOf2s / 10);
+              bits = +bits / Math.pow(2, 10 * i);
+
+              // Rounds to 2 decimals places.
+              if (bits.toString().length > bits.toFixed(3).toString().length) {
+                  bits = bits.toFixed(2);
+              }
+              result.push('<span style="font-weight:bold; color:'+ point.series.color +'">' + point.series.name + '</font></b>' + ': ' + bits + units[i] + '<br/>');
+            } else {
+              // Format the number to add commas
+              var value = point.y.toString().replace(#{'/\B(?=(\d{3})+(?!\d))/g'}, ",");
+              result.push('<span style="font-weight:bold; color:'+ point.series.color +'">' + point.series.name + '</span>' + ': ' + value + '<br />');
+            }
           });
 
           result.unshift(new Date(this.x).toString() + '<br/>');
