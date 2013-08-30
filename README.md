@@ -1,6 +1,16 @@
 # Lexicon
 
-TODO: Write a gem description
+A graphing utility based on Highcharts
+
+Lexicon is designed to take inputs from various sources polled at specified
+intervals. Much like the PHP project Cacti, it can be used for a variety of
+graphing situations such as system administration.
+
+***Currently this is proof of concept and should be considered Alpha at best***
+
+## Screenshot
+
+![Screenshot](https://github.com/jvoss/lexicon/raw/master/examples/chart.png "Screenshot")
 
 ## Installation
 
@@ -18,7 +28,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To get started, look at examples/lexicon-demo.
+
+Adjust the demo file to point at the appropriate SNMP OIDs and Redis server
+then launch:
+
+    bin/lexicon-httpd.rb <REDIS SERVER IP> -o 0.0.0.0
+
+Custom input objects can be created by extending the functionality of the
+Lexicon::Input class. Ensure that your new Input class responds to the methods
+specified in Lexicon::Input.
 
 ## Contributing
 
