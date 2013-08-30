@@ -10,7 +10,7 @@ graphing situations such as system administration.
 
 ## Screenshot
 
-![Screenshot](https://raw.github.com/jvoss/lexicon/master/examples/chart.svg)
+![Screenshot](https://raw.github.com/jvoss/lexicon/master/examples/chart.png)
 
 ## Installation
 
