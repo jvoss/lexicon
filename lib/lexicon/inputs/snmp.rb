@@ -60,11 +60,15 @@ module Lexicon
 
       response = Source.find_by_name(@source).snmp.get(@oid)
       response.each_varbind do |vb|
-        case
+         case
           when vb.value.is_a?(SNMP::OctetString)
             data = vb.value.to_s
           when vb.value.is_a?(SNMP::Counter64)
             data = vb.value.to_i
+          when vb.value.is_a?(SNMP::Gauge32)
+            data = vb.value.to_i
+          when vb.value == SNMP::NoSuchInstance
+            raise RuntimeError, "OID #{@oid} does not respond on device: #{@source}"
           else
             raise RuntimeError, "Unsupported SNMP data type: #{vb.value.class}"
         end
@@ -89,7 +93,7 @@ module Lexicon
 
       unless timestamps.empty? # do nothing if there were not any timestamps
         result = Base.redis.hmget(@redis_key, timestamps)
-        series_hash = Hash[*timestamps.zip(result).flatten]
+        series_hash = Hash[*timestamps.zip(result.map(&:to_i)).flatten]
 
         return decode_counter(series_hash) if @type == :counter32 or @type == :counter64
         return series_hash
@@ -111,8 +115,8 @@ module Lexicon
           set_hash = decode_counter(set_hash)
         else
           timestamp = Base.redis.hkeys(@redis_key).sort_by(&:to_i).last.to_i
-          result = Base.redis.hmget(@redis_key, timestamps)
-          set_hash = { timestamp => result }
+          result = Base.redis.hmget(@redis_key, timestamp)
+          set_hash = { timestamp => result[0].to_i } if result
       end
 
       set_hash

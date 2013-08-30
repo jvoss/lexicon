@@ -121,7 +121,7 @@ module Lexicon
             new_data = eval(json);
 
             chart.series.forEach(function(series){
-              shift = true;
+              shift = false;
 
               // Ignore 'Navigator' data series if exists
               if (series.name != 'Navigator'){

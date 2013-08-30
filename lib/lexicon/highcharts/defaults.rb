@@ -21,17 +21,17 @@ module Lexicon
     }
 
     PLOT_OPTIONS = {
-        #:area => {
-        #    :lineWidth => 1,
-        #    :marker    => {:enabled => false},
-        #    :states    => {:hover => {:lineWidth => 1}},
-        #    :threshold => :null
-        #},
+        :area => {
+            :lineWidth => 1,
+            :marker    => {:enabled => false},
+            :states    => {:hover => {:lineWidth => 1}},
+            :threshold => 0
+        },
         :line => {
             :lineWidth => 1,
             :marker    => { :enabled => false},
             :states    => {:hover => {:lineWidth => 1}},
-            :threshold => :null
+            :threshold => 0
         }
     }
 
