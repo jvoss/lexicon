@@ -28,16 +28,25 @@ Or install it yourself as:
 
 ## Usage
 
-To get started, look at examples/lexicon-demo.
+To get started, look at examples/lexicon-demo.rb
 
 Adjust the demo file to point at the appropriate SNMP OIDs and Redis server
-then launch:
+then launch the example to configure Redis and run the poller:
 
-    bin/lexicon-httpd.rb <REDIS SERVER IP> -o 0.0.0.0
+    ruby <path to example>/lexicon-demo.rb
+
+Then launch the web server:
+
+    lexicon-httpd.rb <REDIS SERVER IP> -o 0.0.0.0
+
+Open a web browser, http://localhost:4567/<chart name>/live or /archive:
+
+View live URL:    http://localhost:4567/demo-chart/live
+View archive URL: http://localhost:4567/demo-chart/archive
 
 Custom input objects can be created by extending the functionality of the
-Lexicon::Input class. Ensure that your new Input class responds to the methods
-specified in Lexicon::Input.
+Lexicon::Input class. See lib/lexicon/inputs/snmp.rb for example. Ensure that
+your new Input class responds to the methods specified in Lexicon::Input.
 
 ## Contributing
 
