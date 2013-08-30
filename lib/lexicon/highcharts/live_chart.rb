@@ -21,13 +21,17 @@ module Lexicon
         chart[:navigator]     = @navigator
         chart[:scrollbar]     = @scrollbar
 
-        # Build series data (default to the last 5 minutes)
-        chart[:series] = build_series((Time.now.to_i - 300), Time.now.to_i)
+        # Build series data (default to the last day minutes)
+        chart[:series] = build_series((Time.now.to_i - 86400), Time.now.to_i)
 
         # Remove not needed and things that cause problems with live charts
-        chart.delete(:navigator) # remove navigatorData FIXME
-        chart[:rangeSelector] = { :enabled => false } # turn off range selector
+        #chart.delete(:navigator) # remove navigatorData FIXME
+        chart[:navigator].delete(:series)
+        chart[:navigator][:adaptToUpdatedData] = true
         chart.delete(:scrollbar)
+
+        chart[:xAxis].delete(:events) # remove requestAsyncData function
+
 
         # Create JSON data
         json = JSON.pretty_generate(chart)
@@ -117,7 +121,7 @@ module Lexicon
             new_data = eval(json);
 
             chart.series.forEach(function(series){
-              shift = #{@shift};
+              shift = true;
 
               // Ignore 'Navigator' data series if exists
               if (series.name != 'Navigator'){
@@ -127,6 +131,7 @@ module Lexicon
                 }
               }
             });
+
             chart.redraw();
           }); // $.getJSON
 

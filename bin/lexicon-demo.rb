@@ -63,9 +63,9 @@ ucast_pkts_obj = Lexicon::InputSNMP.new(
 # Create a new chart
 Lexicon::Highcharts.new(
     :axis => {
-        in_bytes_obj   => {:type=>'areaspline', :name=>'InBytes',   :color=>'#00ff00'},
-        out_bytes_obj  => {:type=>'spline',     :name=>'OutBytes',  :color=>'#0000ff'},
-        ucast_pkts_obj => {:type=>'line',       :name=>'UcastPkts', :color=>'#ff9933', :yAxis => 1}
+        in_bytes_obj   => {:type=>'area', :name=>'InBytes',   :color=>'#00ff00'},
+        out_bytes_obj  => {:type=>'line', :name=>'OutBytes',  :color=>'#0000ff'},
+        ucast_pkts_obj => {:type=>'line', :name=>'UcastPkts', :color=>'#ff9933', :yAxis => 1}
     },
     :data_url => 'data.json',
     :live_url => 'live.json',
@@ -75,8 +75,8 @@ Lexicon::Highcharts.new(
     :subtitle => {:text => 'This is a subtitle'},
     :yaxis    => [
         # Primary axis
-        {:title => {:text => 'Average Bytes per Second'}},
-        {:title => {:text => 'Unicast Packets'}, :opposite => true}
+        {:title => {:text => 'Average Bytes per Second'}, :min => 0},
+        {:title => {:text => 'Unicast Packets'}, :opposite => true, :min => 0}
     ]
 
 )

@@ -16,7 +16,7 @@ module Lexicon
     LEGEND = {:enabled => true}
 
     NAVIGATOR = {
-        :adaptToUpdatedData => false,
+        :adaptToUpdatedData => true,
         :series => { :data => 'navigatorData' }
     }
 
