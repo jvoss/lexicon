@@ -39,10 +39,12 @@ Then launch the web server:
 
     lexicon-httpd.rb <REDIS SERVER IP> -o 0.0.0.0
 
-Open a web browser, http://localhost:4567/<chart name>/live or /archive:
+Open a web browser:
 
-View live URL:    http://localhost:4567/demo-chart/live
-View archive URL: http://localhost:4567/demo-chart/archive
+    http://localhost:4567/<chart name>/live or /archive:
+
+    View live URL:    http://localhost:4567/demo-chart/live
+    View archive URL: http://localhost:4567/demo-chart/archive
 
 Custom input objects can be created by extending the functionality of the
 Lexicon::Input class. See lib/lexicon/inputs/snmp.rb for example. Ensure that
