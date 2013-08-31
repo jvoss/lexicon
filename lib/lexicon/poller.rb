@@ -17,8 +17,12 @@ module Lexicon
         source.inputs.each do |input|
          timers.push lambda{
            EventMachine::PeriodicTimer.new(input.interval) do
-            Log.debug "Poller - Time: #{Time.now} Polling: #{input.source} #{input.name}"
-            input.poll
+             Log.debug "Poller - Time: #{Time.now} Polling: #{input.source} #{input.name}"
+             begin
+               input.poll
+             rescue SNMP::RequestTimeout
+               Log.info "SNMP Timeout: #{input.source} #{input.name}"
+             end
            end # EventMachine::PeriodicTimer.new
          }
         end # source.inputs.each
